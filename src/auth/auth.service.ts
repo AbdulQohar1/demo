@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
 import { User } from '../users/entities/user.entity'
-import { CreateAuthDto, LoginDto, RegisterDto } from './dto/create-auth.dto';
+import {  LoginDto, RegisterDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { access } from 'fs';
 
@@ -57,9 +57,9 @@ export class AuthService {
       access_token: await this.jwtService.signAsync(payload),
     }
   }
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  // create(createAuthDto: CreateAuthDto) {
+  //   return 'This action adds a new auth';
+  // }
 
   findAll() {
     return `This action returns all auth`;
