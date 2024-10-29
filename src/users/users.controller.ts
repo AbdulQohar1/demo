@@ -16,6 +16,7 @@ import { UsersService } from './users.service';
 @Controller('users')
 export class UsersController implements CrudController<User> {
   constructor(public service: UsersService) {}
+  
 }
 // export class UsersController {
 //   constructor(private readonly usersService: UsersService) {}
