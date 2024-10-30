@@ -1,16 +1,19 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { Crud, CrudController } from '@dataui/crud';
-// import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { from } from 'rxjs';
-
 import {User } from './entities/user.entity';
 import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Crud({
   model: {
     type: User
+  },
+  dto: {
+    create: CreateUserDto,
+  },
+  routes: {
+    only: ['createOneBase'], 
   },
 })
 @Controller('users')

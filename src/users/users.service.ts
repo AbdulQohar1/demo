@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { TypeOrmCrudService } from '@dataui/crud-typeorm';
 import { User } from '../users/entities/user.entity';
+import * as bcrypt from 'bcryptjs'
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CrudRequest } from '@dataui/crud';
+import { DeepPartial } from 'typeorm';
 
 @Injectable()
 export class UsersService extends TypeOrmCrudService<User> {
@@ -12,6 +14,14 @@ export class UsersService extends TypeOrmCrudService<User> {
     super(repo)
   }
   
+  async createOne(req: any, dto: DeepPartial<User>): Promise<User> {
+    if (dto.password) {
+      const salt = await bcrypt.genSalt(10);
+      dto.password = await bcrypt.hash(dto.password, salt);
+    }
+    return super.createOne(req, dto);
+  }
+
 }
 // export class UsersService {
 //   create(createUserDto: CreateUserDto) {
