@@ -6,7 +6,7 @@ import * as bcrypt from 'bcryptjs'
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CrudRequest, GetManyDefaultResponse } from '@dataui/crud';
-import { DeepPartial } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService extends TypeOrmCrudService<User> {
@@ -21,4 +21,29 @@ export class UsersService extends TypeOrmCrudService<User> {
     }
     return super.createOne(req, dto);
   }
+
+  async register(req: any, dto: DeepPartial<User>): Promise<User> {
+    const password = dto.password;
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return this.repo.save({
+      ...dto, password: hashedPassword 
+    });
+  }
+
+  async validateUser(email: string, password: string) :Promise<User | null> {
+    const user = await this.repo.findOne({where: {email} });
+    
+    if (user && await bcrypt.compare(password, user.password)) {
+      return user
+    }
+    return null
+  }
+  
+
+  // async register(createUserDto: CreateUserDto): Promise<User> {
+  //   const {password} = createUserDto;
+
+  //   con
+  // }
 }
