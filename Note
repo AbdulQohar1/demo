@@ -1,2 +1,21 @@
 when user already exists is db
 hash password
+
+@Controller('users')
+export class UsersController {
+  constructor(public service: UsersService) {}
+
+  // Optional: Add custom endpoints for protected operations
+  @UseGuards(JwtAuthGuard)
+  @Override('updateOneBase')
+  async updateOne(
+    @ParsedRequest() req: CrudRequest,
+    @Request() request,
+  ) {
+    // Ensure users can only update their own data
+    if (request.user.id !== req.parsed.paramsFilter[0].value) {
+      throw new UnauthorizedException('Cannot update other users');
+    }
+    return this.service.updateOne(req);
+  }
+}
