@@ -15,30 +15,31 @@ export class UsersService extends TypeOrmCrudService<User> {
   }
   
   async createOne(req: any, dto: DeepPartial<User>): Promise<User> {
-    if (dto.password) {
-      const salt = await bcrypt.genSalt(10);
-      dto.password = await bcrypt.hash(dto.password, salt);
+   if (dto.password) {
+     const salt = await bcrypt.genSalt(10);
+       dto.password = await bcrypt.hash(dto.password, salt);
     }
     return super.createOne(req, dto);
   }
 
-  async register(req: any, dto: DeepPartial<User>): Promise<User> {
-    const password = dto.password;
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
-    return this.repo.save({
-      ...dto, password: hashedPassword 
-    });
-  }
+  // async register(req: any, dto: DeepPartial<User>): Promise<User> {
 
-  async validateUser(email: string, password: string) :Promise<User | null> {
-    const user = await this.repo.findOne({where: {email} });
+  //   const password = dto.password;
     
-    if (user && await bcrypt.compare(password, user.password)) {
-      return user
-    }
-    return null
-  }
+  //   const hashedPassword = await bcrypt.hash(password, 10);
+  //   return this.repo.save({
+  //     ...dto, password: hashedPassword 
+  //   });
+  // }
+
+  // async validateUser(email: string, password: string) :Promise<User | null> {
+  //   const user = await this.repo.findOne({where: {email} });
+    
+  //   if (user && await bcrypt.compare(password, user.password)) {
+  //     return user
+  //   }
+  //   return null
+  // }
   
 
   // async register(createUserDto: CreateUserDto): Promise<User> {
