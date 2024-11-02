@@ -1,21 +1,34 @@
-when user already exists is db
-hash password
+  /*async register(email:string, password: string, dto: DeepPartial<User>): Promise<User> {
 
-@Controller('users')
-export class UsersController {
-  constructor(public service: UsersService) {}
+    const user = await this.userService.findOne(email)
 
-  // Optional: Add custom endpoints for protected operations
-  @UseGuards(JwtAuthGuard)
-  @Override('updateOneBase')
-  async updateOne(
-    @ParsedRequest() req: CrudRequest,
-    @Request() request,
-  ) {
-    // Ensure users can only update their own data
-    if (request.user.id !== req.parsed.paramsFilter[0].value) {
-      throw new UnauthorizedException('Cannot update other users');
-    }
-    return this.service.updateOne(req);
+  //   const password = dto.password;
+  
+  // const hashedPassword = await bcrypt.hash(password, 10);
+  // return this.repo.save({ ...dto, password: hashedPassword })
+  return {
+    // email: user.email,
+    // token: accessToken,
   }
-}
+ }
+*/
+
+
+// @Controller('users')
+// export class UsersController {
+//   constructor(public service: UsersService) {}
+
+//   // Optional: Add custom endpoints for protected operations
+//   @UseGuards(JwtAuthGuard)
+//   @Override('updateOneBase')
+//   async updateOne(
+//     @ParsedRequest() req: CrudRequest,
+//     @Request() request,
+//   ) {
+//     // Ensure users can only update their own data
+//     if (request.user.id !== req.parsed.paramsFilter[0].value) {
+//       throw new UnauthorizedException('Cannot update other users');
+//     }
+//     return this.service.updateOne(req);
+//   }
+// }

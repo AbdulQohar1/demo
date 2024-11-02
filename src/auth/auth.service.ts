@@ -1,10 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs'; 
 import { JwtService } from '@nestjs/jwt';
+import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { Repository } from 'typeorm';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { DeepPartial } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 
@@ -13,9 +14,38 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private userService: UsersService,
+    private usersService: UsersService,
     private jwtService: JwtService
   ) {}
+
+  
+
+  // user registration with password hashing
+  async register( createUserDto: CreateUserDto): Promise<User> {
+    // check if user already exists in the db
+    const existingUser = await this.usersService.findByEmail(createUserDto.email);
+
+    if (existingUser) {
+      throw new BadRequestException('Email is already registered');
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+
+    // Save the new user with the hashed password
+    const user = await this.usersService.create({
+      ...createUserDto,
+      password: hashedPassword,
+    });
+
+    return user;
+  }
+
+  // login and validate user credentials
+
+
+
 
   async validateUser(email: string, password: string): Promise<any> {
     // find user using the repository from usersService
