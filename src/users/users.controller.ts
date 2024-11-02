@@ -39,13 +39,13 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
     }
   }
 })
-// @CrudAuth({
-//   property: 'user',
-//   filter: (user: User) => ({
-//     // id: user.id // Users can only access their own data
-//     email: user.email
-//   })
-// })
+@CrudAuth({
+  property: 'user',
+  filter: (user: User) => ({
+    // id: user.id // Users can only access their own data
+    // email: user.email
+  })
+})
 @Controller('users')
 export class UsersController implements CrudController<User> {
   constructor(public service: UsersService) {}
