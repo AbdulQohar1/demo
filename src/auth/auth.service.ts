@@ -43,10 +43,6 @@ export class AuthService {
   }
 
   // login and validate user credentials
-
-
-
-
   async validateUser(email: string, password: string): Promise<any> {
     // find user using the repository from usersService
     const user = await this.userRepository.findOne({
