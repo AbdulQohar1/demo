@@ -1,6 +1,8 @@
 
 import { Controller, UseGuards } from '@nestjs/common';
-import { Crud, CrudAuth,
+import { 
+  Crud, 
+  CrudAuth,
   CrudController, 
 } from '@dataui/crud';
 import {User } from './entities/user.entity';
@@ -14,7 +16,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
     type: User
   },
   query: {
-    exclude: ['password'],
+    // exclude: ['password'],1
     alwaysPaginate: true,
   },
   dto: {
@@ -39,13 +41,14 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
     }
   }
 })
-@CrudAuth({
-  property: 'user',
-  filter: (user: User) => ({
-    // id: user.id // Users can only access their own data
-    // email: user.email
-  })
-})
+// @CrudAuth({
+//   property: 'user',
+//   filter: (user: User) => ({
+//      id: user.id}), //filters by user id
+//   persist: (user: User) => ({id: user.id}) 
+//   //sets userid on create/update
+// })
+// @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController implements CrudController<User> {
   constructor(public service: UsersService) {}

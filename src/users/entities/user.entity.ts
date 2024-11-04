@@ -15,15 +15,15 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  // @Exclude()
-  // @Column({ select: false })
+  @Exclude()
+  @Column({ select: false })
   @Column()
   password: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  // constructor(partial: Partial<User>) {
-  //   Object.assign(this ,partial);
-  // }
+  constructor(partial: Partial<User>) {
+    Object.assign(this ,partial);
+  }
 }
