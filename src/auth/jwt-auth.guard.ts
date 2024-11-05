@@ -4,12 +4,19 @@ import {
   CanActivate,
   ExecutionContext,
 } from "@nestjs/common";
+// import { AuthGuard } from "@nestjs/passport";
+// import * as jwt from 'jsonwebtoken';
 import { AuthService } from "./auth.service";
+import { User } from '../users/entities/user.entity';
+// import { ConfigService } from '@nestjs/config';
 import { Request } from "express";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    // private configService: ConfigService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -20,6 +27,7 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
+      // verify token in AuthService
       const user = await this.authService.verifyToken(token);
       // Add user to request object for @CrudAuth to use
       request.user = user;
@@ -28,6 +36,14 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
   }
+
+  // async verifyToken (token: string): Promise<User> {
+  //   const jwtSecret = this.configService.get<string>('JWT_SECRET');
+  //   const decoded = jwt.verify(token, jwtSecret)
+    
+  //   return decoded as User;
+
+  // }
 
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
