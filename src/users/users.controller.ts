@@ -10,6 +10,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../decorators/decorators';
 import {RolesGuard} from '../auth/roles.guard';
 import { UserRole } from '../users/entities/user.entity';
 
@@ -33,15 +34,21 @@ import { UserRole } from '../users/entities/user.entity';
       decorators: []
     },
     createOneBase: {
-      decorators: []
+      decorators: [UseGuards(JwtAuthGuard, RolesGuard)]
     },
     updateOneBase: {
-      decorators: [UseGuards(JwtAuthGuard)]
+      decorators: [UseGuards(JwtAuthGuard, RolesGuard)]
     },
     deleteOneBase: {
-      decorators: [UseGuards(JwtAuthGuard)]
+      decorators: [UseGuards(JwtAuthGuard, RolesGuard)]
     }
   }
+})
+@CrudAuth({
+  property: 'user',
+  // Admins can modify all posts; others only their own.
+  persist: (user: User) => ({ authorId: user.id }), // Automatically set the author ID on create
+  filter: (user: User) => (user.role === UserRole.ADMIN ? {} : { authorId: user.id }), 
 })
 // @CrudAuth({
 //   property: 'user',
@@ -58,5 +65,9 @@ export class UsersController implements CrudController<User> {
   get base(): CrudController<User> {
     return this;
   }
+}
+@Controller('posts')
+export class PostsController {
+  constructor(public service: PostsService) {}
 }
 
