@@ -29,6 +29,8 @@ export class JwtAuthGuard implements CanActivate {
     try {
       // verify token in AuthService
       const user = await this.authService.verifyToken(token);
+
+      if (!user) throw new UnauthorizedException('Invalid user');
       // Add user to request object for @CrudAuth to use
       request.user = user;
       return true;

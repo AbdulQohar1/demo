@@ -17,10 +17,10 @@ import { UserRole } from '../users/entities/user.entity';
   },
   routes: {
     getOneBase: {
-      decorators: [], // Open to everyone
+      decorators: [], 
     },
     getManyBase: {
-      decorators: [], // Open to everyone
+      decorators: [],
     },
     createOneBase: {
       decorators: [
@@ -51,9 +51,3 @@ export class PostsController implements CrudController<Post> {
     return this;
   }
 }
-// @Controller('posts')
-// export class PostsController {
-//   constructor(private readonly postsService: PostsService) {}
-
-  
-// }

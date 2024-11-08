@@ -3,6 +3,7 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
+import { UserRole } from '../users/entities/user.entity';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { DeepPartial } from 'typeorm';
 import { Repository } from 'typeorm';
@@ -22,8 +23,10 @@ export class AuthService {
 
   // user registration with password hashing
   async register( createUserDto: CreateUserDto): Promise<User> {
+    const { email, name, password, role } = createUserDto
+
     // check if user already exists in the db
-    const existingUser = await this.usersService.findByEmail(createUserDto.email);
+    const existingUser = await this.usersService.findByEmail(email);
 
     if (existingUser) {
       throw new BadRequestException('Email is already registered');
@@ -31,12 +34,16 @@ export class AuthService {
 
     // Hash the password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     // Save the new user with the hashed password
     const user = await this.usersService.create({
-      ...createUserDto,
+      name,
+      email,
       password: hashedPassword,
+      role:  role ?? UserRole.USER
+      // ...createUserDto,
+      // password: hashedPassword,
     });
 
     return user;
@@ -81,7 +88,8 @@ export class AuthService {
       const payload = this.jwtService.verify(token);
 
       const user = await this.userRepository.findOne({
-        where: {id: payload.sub}
+        where: {id: payload.sub},
+        select: ['id', 'email', 'role'],
       });
 
       if (!user) {

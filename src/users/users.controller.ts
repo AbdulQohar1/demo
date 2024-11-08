@@ -56,8 +56,16 @@ import { UserRole } from '../users/entities/user.entity';
 @CrudAuth({
   property: 'user',
   // Admins can modify all posts; others only their own.
-  persist: (user: User) => ({ authorId: user.id }), // Automatically set the author ID on create
-  filter: (user: User) => (user.role === UserRole.ADMIN ? {} : { authorId: user.id }), 
+  persist: (user: User) => ({ authorId: user.id }), 
+  // Automatically set the author ID on create
+  filter: (user: User) => {
+    if (user && user.role === UserRole.ADMIN) {
+      return {};
+    }
+    return { authorId: user?.id };
+    
+    // (user.role === UserRole.ADMIN ? {} : { authorId: user.id }), 
+  }
 })
 // @CrudAuth({
 //   property: 'user',
