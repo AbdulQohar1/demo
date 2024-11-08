@@ -6,6 +6,9 @@ import { UsersModule } from './users/users.module';
 import { User} from './users/entities/user.entity'
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { Post } from './posts/entities/post.entity';
+import { PostsModule } from './posts/posts.module';
+// import { PostsModule } from './posts/posts.module';
 
 @Module({
   controllers: [AppController],
@@ -25,10 +28,12 @@ import { AuthModule } from './auth/auth.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
+        entities: [Post, User],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
+    PostsModule,
   ],
 })
 export class AppModule {}
