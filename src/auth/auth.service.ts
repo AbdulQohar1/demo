@@ -80,16 +80,18 @@ export class AuthService {
       email: user.email
     }
 
+    console.log('Token Payload:', payload);
     return this.jwtService.sign(payload);
   };
 
   async  verifyToken(token: string): Promise<User> {
     try {
       const payload = this.jwtService.verify(token);
+      console.log('Verified Token Payload:', payload);
 
       const user = await this.userRepository.findOne({
         where: {id: payload.sub},
-        select: ['id', 'email', 'role'],
+        // select: ['id', 'email', 'role'],
       });
 
       if (!user) {
@@ -99,23 +101,8 @@ export class AuthService {
       return user;
     } catch (error)
      {
+      console.error('Token Verification Error:', error);
       throw new UnauthorizedException('Invalid token')
     }
   }
-
-
-  /*async register(email:string, password: string, dto: DeepPartial<User>): Promise<User> {
-
-    const user = await this.userService.findOne(email)
-
-  //   const password = dto.password;
-  
-  // const hashedPassword = await bcrypt.hash(password, 10);
-  // return this.repo.save({ ...dto, password: hashedPassword })
-  return {
-    // email: user.email,
-    // token: accessToken,
-  }
- }
-  */
 }

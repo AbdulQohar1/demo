@@ -38,17 +38,17 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
   }
-
-  // async verifyToken (token: string): Promise<User> {
-  //   const jwtSecret = this.configService.get<string>('JWT_SECRET');
-  //   const decoded = jwt.verify(token, jwtSecret)
-    
-  //   return decoded as User;
-
-  // }
-
+  
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
 }
+
+// async verifyToken (token: string): Promise<User> {
+//   const jwtSecret = this.configService.get<string>('JWT_SECRET');
+//   const decoded = jwt.verify(token, jwtSecret)
+  
+//   return decoded as User;
+
+// }
