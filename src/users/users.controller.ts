@@ -36,19 +36,19 @@ import { UserRole } from '../users/entities/user.entity';
     createOneBase: {
       decorators: [
         UseGuards(JwtAuthGuard, RolesGuard),
-        Roles(UserRole.USER, UserRole.ADMIN)
+        // Roles(UserRole.USER, UserRole.ADMIN)
       ]    
     },
     updateOneBase: {
       decorators: [
         UseGuards(JwtAuthGuard, RolesGuard),
-        Roles(UserRole.USER, UserRole.ADMIN)
+        // Roles(UserRole.USER, UserRole.ADMIN)
       ]
     },
     deleteOneBase: {
       decorators: [
         UseGuards(JwtAuthGuard, RolesGuard),
-        Roles(UserRole.USER, UserRole.ADMIN)
+        // Roles(UserRole.USER, UserRole.ADMIN)
       ]
     }
   }

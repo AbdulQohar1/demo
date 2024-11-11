@@ -31,13 +31,13 @@ import { AuthController } from './auth.controller';
   controllers: [AuthController],
   providers: [
     AuthService, 
-    // JwtAuthGuard, 
+    JwtAuthGuard, 
     // JwtStrategy 
   ],
   exports: [
     AuthService, 
-    JwtModule
-     //JwtAuthGuard
+    // JwtModule
+     JwtAuthGuard
     ]
 })
 export class AuthModule {}

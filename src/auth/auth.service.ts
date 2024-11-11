@@ -19,8 +19,6 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  
-
   // user registration with password hashing
   async register( createUserDto: CreateUserDto): Promise<User> {
     const { email, name, password, role } = createUserDto
@@ -54,7 +52,7 @@ export class AuthService {
     // find user using the repository from usersService
     const user = await this.userRepository.findOne({
       where: {email},
-      select: [ 'email' , 'password']
+      select: ['id', 'email' , 'password']
     });
 
     if (!user) {
@@ -91,7 +89,7 @@ export class AuthService {
 
       const user = await this.userRepository.findOne({
         where: {id: payload.sub},
-        // select: ['id', 'email', 'role'],
+        select: ['id', 'email', 'role'],
       });
 
       if (!user) {
