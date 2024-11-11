@@ -36,25 +36,4 @@ export class UsersService extends TypeOrmCrudService<User> {
     const user = this.usersRepository.create(userData);
     return this.usersRepository.save(user);
   }
-
-
-
-  // async createOne(req: CrudRequest, dto: DeepPartial<User>): Promise<User> {
-  //  if (dto.password) {
-  //    const salt = await bcrypt.genSalt(10);
-  //      dto.password = await bcrypt.hash(dto.password, salt);
-  //   }
-  //   return super.createOne(req, dto);
-  // }
-
-  // async register(req: any, dto: DeepPartial<User>): Promise<User> {
-
-  //   const password = dto.password;
-    
-  //   const hashedPassword = await bcrypt.hash(password, 10);
-  //   return this.repo.save({
-  //     ...dto, password: hashedPassword 
-  //   });
-  // }
-
 }
