@@ -1,9 +1,11 @@
 import { 
   Entity, 
   PrimaryGeneratedColumn, 
-  Column, 
+  Column,
+  OneToMany, 
   CreateDateColumn
 } from 'typeorm';
+import { Post } from 'src/posts/entities/post.entity';
 import { Exclude } from 'class-transformer';
 
 export enum UserRole {
@@ -11,7 +13,7 @@ export enum UserRole {
   ADMIN = 'admin',
 }
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn() 
   id: string;
@@ -24,6 +26,9 @@ export class User {
   @Exclude()
   @Column({ select: false })
   password: string;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
   @CreateDateColumn()
   createdAt: Date;

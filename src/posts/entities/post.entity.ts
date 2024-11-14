@@ -2,19 +2,29 @@ import {
   Entity, 
   PrimaryGeneratedColumn, 
   Column,
+  ManyToOne,
+  JoinColumn,
   CreateDateColumn
 } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 
-@Entity()
+@Entity('posts')
 export class Post {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column()
   title: string;
 
   @Column()
   content: string;
+
+  @ManyToOne(() => User, (user) => user.posts)
+  @JoinColumn({ name: 'userId' })
+  user: User;
+
+  @Column()
+  userId: string;
 
   @CreateDateColumn()
   createdAt: Date;

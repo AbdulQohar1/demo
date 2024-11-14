@@ -1,4 +1,4 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller, UseGuards, Patch, Delete, Body, Param, Req } from '@nestjs/common';
 import { Crud, CrudAuth, CrudController } from '@dataui/crud';
 import { Post } from './entities/post.entity';
 import { PostsService } from './posts.service';
@@ -44,10 +44,26 @@ import { UserRole } from '../users/entities/user.entity';
 })
 
 @Controller('posts')
+@UseGuards(JwtAuthGuard)
 export class PostsController implements CrudController<Post> {
   constructor(public service: PostsService) {}
 
   get base(): CrudController<Post> {
     return this;
+  }
+
+  @Patch(':id')
+  async updatePost(
+    @Param('id') postId: number,
+    @Req() req,
+    @Body() updateData: Partial<Post>
+  ) {
+    return this.updatePost(postId, req.user.id, updateData);
+  };
+
+  @Delete(':id')
+  async deletePost(@Param('id') postId: number, @Req() req) {
+    await this.deletePost(postId, req.user.id);
+    return { message: 'Post deleted successfully' };
   }
 }
