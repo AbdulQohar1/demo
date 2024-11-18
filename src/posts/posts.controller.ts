@@ -7,6 +7,8 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../decorators/decorators';
 import { UserRole } from '../users/entities/user.entity';
+import { Public } from '../decorators/decorators';
+import { umask } from 'process';
 
 @Crud({
   model: {
@@ -14,13 +16,19 @@ import { UserRole } from '../users/entities/user.entity';
   },
   query: {
     alwaysPaginate: true,
+    join: {
+      user: {
+        eager: true,
+        exclude: ['password'],
+      }
+    }
   },
   routes: {
     getOneBase: {
-      decorators: [], 
+      decorators: [Public()], 
     },
     getManyBase: {
-      decorators: [],
+      decorators: [Public()],
     },
     createOneBase: {
       decorators: [
@@ -42,9 +50,15 @@ import { UserRole } from '../users/entities/user.entity';
     },
   },
 })
+// @CrudAuth({
+//   property: 'user',
+//   persist: (user: any) => ({
+//     userId: user.id
+//   })
+// })
 
 @Controller('posts')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 export class PostsController implements CrudController<Post> {
   constructor(public service: PostsService) {}
 

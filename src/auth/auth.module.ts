@@ -23,6 +23,7 @@ import { AuthController } from './auth.controller';
         signOptions: { expiresIn: configService.get<string>('JWT_EXPIRATION') }
       })
     }),
+    JwtModule
   ],
   controllers: [AuthController],
   providers: [

@@ -4,7 +4,8 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  CreateDateColumn
+  CreateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 
@@ -28,5 +29,8 @@ export class Post {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
 

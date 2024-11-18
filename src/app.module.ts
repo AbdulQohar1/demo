@@ -14,8 +14,9 @@ import { PostsModule } from './posts/posts.module';
   controllers: [AppController],
   providers: [AppService],
   imports: [
-    ConfigModule.forRoot({ isGlobal: true,
-    }),
+    ConfigModule.forRoot(
+      { isGlobal: true},
+    ),
     AuthModule,
     UsersModule,
     TypeOrmModule.forRootAsync({

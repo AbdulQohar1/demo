@@ -10,6 +10,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Public } from '../decorators/decorators';
 import { Roles } from '../decorators/decorators';
 import {RolesGuard} from '../auth/roles.guard';
 import { UserRole } from '../users/entities/user.entity';
@@ -35,8 +36,9 @@ import { UserRole } from '../users/entities/user.entity';
     },
     createOneBase: {
       decorators: [
-        UseGuards(JwtAuthGuard, RolesGuard),
-        Roles(UserRole.USER, UserRole.ADMIN)
+        Public(),
+        // UseGuards(JwtAuthGuard, RolesGuard),
+        // Roles(UserRole.USER, UserRole.ADMIN)
       ]    
     },
     updateOneBase: {
@@ -53,6 +55,16 @@ import { UserRole } from '../users/entities/user.entity';
     }
   }
 })
+@Controller('users')
+export class UsersController implements CrudController<User> {
+  constructor(public service: UsersService) {}
+  
+  get base(): CrudController<User> {
+    return this;
+  }  
+}
+
+
 // @CrudAuth({
 //   property: 'user',
 //   // Admins can modify all posts; others only their own.
@@ -75,13 +87,3 @@ import { UserRole } from '../users/entities/user.entity';
 //   //sets userid on create/update
 // })
 // @UseGuards(JwtAuthGuard)
-@Controller('users')
-export class UsersController implements CrudController<User> {
-  constructor(public service: UsersService) {}
-
-  get base(): CrudController<User> {
-    return this;
-  }
-}
-
-
