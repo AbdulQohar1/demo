@@ -8,7 +8,6 @@ import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../decorators/decorators';
 import { UserRole } from '../users/entities/user.entity';
 import { Public } from '../decorators/decorators';
-import { umask } from 'process';
 
 @Crud({
   model: {
@@ -67,6 +66,7 @@ export class PostsController implements CrudController<Post> {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   async updatePost(
     @Param('id') postId: string,
     @Req() req,
