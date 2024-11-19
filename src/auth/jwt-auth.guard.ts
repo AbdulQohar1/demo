@@ -6,6 +6,7 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { AuthService } from "./auth.service";
+import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 import { Request } from "express";
 
@@ -13,7 +14,8 @@ import { Request } from "express";
 export class JwtAuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,
-    private reflector: Reflector
+    private reflector: Reflector,
+    // private jwtService: JwtService
     // private configService: ConfigService,
   ) {}
 
@@ -41,7 +43,7 @@ export class JwtAuthGuard implements CanActivate {
       request.user = user;
 
       return true;
-      
+
     } catch {
       throw new UnauthorizedException();
     }

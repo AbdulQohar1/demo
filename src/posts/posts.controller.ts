@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Patch, Delete, Body, Param, Req } from '@nestjs/common';
+import { Controller, UseGuards, Patch, Delete, Body, Param, Req, UnauthorizedException } from '@nestjs/common';
 import { Crud, CrudAuth, CrudController } from '@dataui/crud';
 import { Post } from './entities/post.entity';
 import { PostsService } from './posts.service';
@@ -68,11 +68,16 @@ export class PostsController implements CrudController<Post> {
 
   @Patch(':id')
   async updatePost(
-    @Param('id') postId: number,
+    @Param('id') postId: string,
     @Req() req,
     @Body() updateData: Partial<Post>
   ) {
-    return this.updatePost(postId, req.user.id, updateData);
+    const userId = req.user?.id;
+    if (!userId) throw new UnauthorizedException('User not found in request');
+
+    // return this.updatePost(postId, req.user.id, updateData);
+     // Call service to perform the update
+     return this.service.updatePost(postId, userId, updateData);
   };
 
   @Delete(':id')
