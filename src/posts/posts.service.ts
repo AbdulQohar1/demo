@@ -56,10 +56,19 @@ export class PostsService extends TypeOrmCrudService<Post>{
 
   // delete post if the user is the creator
   async deletePost(postId: string, userId: string): Promise<Post> {
-    const post = await this.findAuthorizedPost(postId, userId);
+    const post = await this.postsRepository.findOne({
+      where: {id: postId, user: {id: userId}},
+    });
 
-    await this.postsRepository.remove(post);
+    if (!post) {
+      throw new UnauthorizedException('You are not authorized to delete this post');
+    };
 
-    return post
+    return this.postsRepository.remove(post)
+    // const post = await this.findAuthorizedPost(postId, userId);
+
+    // await this.postsRepository.remove(post);
+
+    // return post
   }
 }

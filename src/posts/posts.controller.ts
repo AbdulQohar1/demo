@@ -81,8 +81,12 @@ export class PostsController implements CrudController<Post> {
   };
 
   @Delete(':id')
-  async deletePost(@Param('id') postId: number, @Req() req) {
-    await this.deletePost(postId, req.user.id);
+  @UseGuards(JwtAuthGuard)
+  async deletePost(@Param('id') postId: string, @Req() req) {
+    const userId = req.user?.id;
+    if (!userId) throw new UnauthorizedException('User not found in request');
+
+    await this.service.deletePost(postId, userId);
     return { message: 'Post deleted successfully' };
   }
 }
