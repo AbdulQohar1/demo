@@ -10,7 +10,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { Post } from './posts/entities/post.entity';
 import { PostsModule } from './posts/posts.module';
-// import { PostsModule } from './posts/posts.module';
 
 @Module({
   controllers: [AppController],

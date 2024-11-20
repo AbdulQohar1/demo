@@ -3,9 +3,7 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { UserRole } from '../users/entities/user.entity';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { DeepPartial } from 'typeorm';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -30,16 +28,11 @@ export class AuthService {
     }
 
     // Hash the password
-    // const hashedPassword = await bcrypt.hash(password, 10);
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Save the new user with the hashed password
     const user = await this.usersService.create({
-      // name,
-      // email,
-      // password: hashedPassword,
-      // role:  role ?? UserRole.USER
       ...createUserDto,
       password: hashedPassword,
     });

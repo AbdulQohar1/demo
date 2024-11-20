@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@dataui/crud-typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
-import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class PostsService extends TypeOrmCrudService<Post>{
@@ -32,13 +31,7 @@ export class PostsService extends TypeOrmCrudService<Post>{
     return post;
   };
 
-  // update a post if the user is the creator
-  // async updatePost(postId: string, userId: string, updateData: Partial<Post>): Promise<Post> {
-  //   const post = await this.findAuthorizedPost(postId, userId);
-
-  //   Object.assign(post, updateData);
-  //   return this.postsRepository.save(post);
-  // } 
+  // update a post if user is the creator
   async updatePost(postId: string, userId: string, updateData: Partial<Post>) {
     const post = await this.postsRepository.findOne({
       where: { id: postId, user: { id: userId } },
@@ -54,7 +47,7 @@ export class PostsService extends TypeOrmCrudService<Post>{
     return this.postsRepository.save(post);
   }
 
-  // delete post if the user is the creator
+  // delete post if user is the creator
   async deletePost(postId: string, userId: string): Promise<Post> {
     const post = await this.postsRepository.findOne({
       where: {id: postId, user: {id: userId}},
@@ -65,10 +58,5 @@ export class PostsService extends TypeOrmCrudService<Post>{
     };
 
     return this.postsRepository.remove(post)
-    // const post = await this.findAuthorizedPost(postId, userId);
-
-    // await this.postsRepository.remove(post);
-
-    // return post
   }
 }

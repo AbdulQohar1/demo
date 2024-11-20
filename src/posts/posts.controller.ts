@@ -75,8 +75,7 @@ export class PostsController implements CrudController<Post> {
     const userId = req.user?.id;
     if (!userId) throw new UnauthorizedException('User not found in request');
 
-    // return this.updatePost(postId, req.user.id, updateData);
-     // Call service to perform the update
+     // update post
      return this.service.updatePost(postId, userId, updateData);
   };
 
